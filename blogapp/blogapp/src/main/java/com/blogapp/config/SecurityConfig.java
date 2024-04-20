@@ -18,7 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity  //enable web security to the application
-@Deprecated 
+@Deprecated
+// Comment from Serius
 public class SecurityConfig extends WebSecurityConfigurerAdapter { //'WebSecurityConfigurerAdapter' --> this class gives methods like 'configure' which is used to implement authentication and authorization in the application
 
     @Autowired
