@@ -22,8 +22,4 @@ public class BlogappApplication {
 		return new ModelMapper();
 		}
 
-		//@Bean
-	    //public PasswordEncoder getPasswordEncoder(){
-		//return new BCryptPasswordEncoder();
-		//}
 }

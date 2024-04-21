@@ -11,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,14 +24,9 @@ public class AuthController {  //this controller class is created for signup and
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder; //used for encode the password
-
-    @Autowired
-    AuthenticationManager authenticationManager;
 
     @PostMapping
-    public ResponseEntity<String> createUser(@RequestBody Signup signUp){
+    public ResponseEntity<String> createUser(@RequestBody Signup signUp){ //for sign up
         if (userRepository.existsByEmail(signUp.getEmail())){
             return new ResponseEntity<>("Email Id is already registered!!", HttpStatus.BAD_REQUEST);
         }
@@ -41,8 +37,8 @@ public class AuthController {  //this controller class is created for signup and
         user.setName(signUp.getName());
         user.setUsername(signUp.getUsername());
         user.setEmail(signUp.getEmail());
-        user.setPassword(passwordEncoder.encode(signUp.getPassword())); //store the password in the database in encrypted detail
-
+        user.setPassword(BCrypt.hashpw(signUp.getPassword(), BCrypt.gensalt(10))); //store the password in the database in encrypted detail
+        user.setUserRole(signUp.getUserRole());
         userRepository.save(user); //save the user in the database
         return new ResponseEntity<>("User Registered",HttpStatus.CREATED);
     }
@@ -55,9 +51,9 @@ public class AuthController {  //this controller class is created for signup and
         // Expected credentials - loginDto.getUsername(),loginDto.getPassword()
         //With the actual credentials given by loadByUser method
 
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken=new UsernamePasswordAuthenticationToken(loginDto.getUsername(),loginDto.getPassword());  // 'UsernamePasswordAuthenticationToken'--> this class is part of Spring Security and represent an authenticating token containing username and password
-        Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken); //this line authenticate the user by passing the 'usernamePasswordAuthenticationToken' to the authenticate() method of AuthenticationManager. If authentication successful then it will return an object of Authentication containing user's authenticating details
-        SecurityContextHolder.getContext().setAuthentication(authenticate);  //create the session variable after successfully login
+//       ; UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken=new UsernamePasswordAuthenticationToken(loginDto.getUsername(),loginDto.getPassword());  // 'UsernamePasswordAuthenticationToken'--> this class is part of Spring Security and represent an authenticating token containing username and password
+//        Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken); //this line authenticate the user by passing the 'usernamePasswordAuthenticationToken' to the authenticate() method of AuthenticationManager. If authentication successful then it will return an object of Authentication containing user's authenticating details
+//        SecurityContextHolder.getContext().setAuthentication(authenticate);  //create the session variable after successfully login
             return new ResponseEntity<>("Sign in successful",HttpStatus.OK);
     }
 }
