@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -30,7 +31,8 @@ public class PostController {
 //            return new ResponseEntity<>("Description is too short!",HttpStatus.INTERNAL_SERVER_ERROR);
 //        }
         if (bindingResult.hasErrors()){
-            return new  ResponseEntity<>(bindingResult.getFieldError().getDefaultMessage(),HttpStatus.BAD_REQUEST);
+            String messages = bindingResult.getAllErrors().stream().map(e -> e.getDefaultMessage()).collect(Collectors.joining("/n"));
+            return new  ResponseEntity<>(messages,HttpStatus.BAD_REQUEST);
         }
         PostDto dto = postService.createPost(postDto);
         return  new ResponseEntity<>(dto, HttpStatus.CREATED);
