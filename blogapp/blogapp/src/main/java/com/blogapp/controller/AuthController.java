@@ -4,6 +4,7 @@ import com.blogapp.entity.User;
 import com.blogapp.payload.LoginDto;
 import com.blogapp.payload.Signup;
 import com.blogapp.repository.UserRepository;
+import com.blogapp.service.JWTService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {  //this controller class is created for signup and sign in feature implementation
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private JWTService jwtService;
 
 
     @PostMapping
@@ -45,7 +48,12 @@ public class AuthController {  //this controller class is created for signup and
 
     @PostMapping("/sign-in")
     public ResponseEntity<String> signIn(@RequestBody LoginDto loginDto){ //this method is used to check the username and password with the actual username and password which is present in the database
-        
-            return new ResponseEntity<>("Sign in successful",HttpStatus.OK);
+        User user = userRepository.findByUsername(loginDto.getUsername());
+        boolean checkpw = BCrypt.checkpw(loginDto.getPassword(),user.getPassword());
+        if (checkpw){
+            String s = jwtService.generateToken(user);
+            return new ResponseEntity<>("token :"+s,HttpStatus.OK);
+        }
+        return new ResponseEntity<>("invalid credentials",HttpStatus.OK);
     }
 }
