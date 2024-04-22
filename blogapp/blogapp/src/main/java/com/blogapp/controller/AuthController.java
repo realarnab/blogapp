@@ -45,15 +45,7 @@ public class AuthController {  //this controller class is created for signup and
 
     @PostMapping("/sign-in")
     public ResponseEntity<String> signIn(@RequestBody LoginDto loginDto){ //this method is used to check the username and password with the actual username and password which is present in the database
-
-        //1. Supply loginDto.getUsername() - username to loadByUser method in CustomUserDetail class
-        //2. it will compare -
-        // Expected credentials - loginDto.getUsername(),loginDto.getPassword()
-        //With the actual credentials given by loadByUser method
-
-//       ; UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken=new UsernamePasswordAuthenticationToken(loginDto.getUsername(),loginDto.getPassword());  // 'UsernamePasswordAuthenticationToken'--> this class is part of Spring Security and represent an authenticating token containing username and password
-//        Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken); //this line authenticate the user by passing the 'usernamePasswordAuthenticationToken' to the authenticate() method of AuthenticationManager. If authentication successful then it will return an object of Authentication containing user's authenticating details
-//        SecurityContextHolder.getContext().setAuthentication(authenticate);  //create the session variable after successfully login
+        
             return new ResponseEntity<>("Sign in successful",HttpStatus.OK);
     }
 }
