@@ -21,7 +21,7 @@ public class Post {
     private  String description;
     private  String content;
 
-    @OneToMany(mappedBy = "post",orphanRemoval = true,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post",orphanRemoval = true,cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private List<Comment> comments=new ArrayList<>();
 
 }
