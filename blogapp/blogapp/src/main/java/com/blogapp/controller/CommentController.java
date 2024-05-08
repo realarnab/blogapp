@@ -16,14 +16,14 @@ public class CommentController {
     private CommentService commentService;
 
     //http://localhost:8080/api/comments/1
-    @PostMapping("/{postId}")
+    @PostMapping("/create/{postId}")
     public ResponseEntity<CommentDto> createComment(@RequestBody CommentDto commentDto, @PathVariable long postId){
         CommentDto dto = commentService.createComment(commentDto, postId);
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 
 
-    @GetMapping("/{postId}")
+    @GetMapping("/show/{postId}")
     public ResponseEntity<PostWithCommentDto> getAllCommentsByPostId(@PathVariable long postId){
         PostWithCommentDto commentsByPostId = commentService.getCommentsByPostId(postId);
         return new ResponseEntity<>(commentsByPostId,HttpStatus.OK);
