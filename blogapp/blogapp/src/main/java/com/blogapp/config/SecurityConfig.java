@@ -18,6 +18,7 @@ public class SecurityConfig {
                 requestMatchers("/api/auth/**").hasAnyRole("USER","ADMIN"). // Define the URL pattern type (POST) which can be accessed without authentication
                 requestMatchers("/api/post/**").hasRole("ADMIN").
                         requestMatchers("/api/comments/**").hasRole("USER").
+                        requestMatchers("/api/auth/**").permitAll().
                 anyRequest().authenticated();// Specify that if the client is try to access any other request(GET, PUT, DELETE) then it need to be authenticated
             return http.build();
     }
